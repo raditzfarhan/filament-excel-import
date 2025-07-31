@@ -46,7 +46,8 @@ class ImportExcel implements ShouldQueue
         public ?int $endRow = null,
         public array $columnMap = [],
         public array $options = [],
-    ) {}
+    ) {
+    }
 
     public function handle(): void
     {
@@ -72,7 +73,7 @@ class ImportExcel implements ShouldQueue
 
         $user = $import->user;
 
-        if (! $user instanceof Authenticatable) {
+        if (!$user instanceof Authenticatable) {
             return;
         }
 
@@ -172,9 +173,9 @@ class ImportExcel implements ShouldQueue
         }
 
         try {
-            $import->increment('imported_rows', $importedRowsCount);
+            $import->increment('successful_rows', $importedRowsCount);
         } catch (Throwable $e) {
-            Log::error('Failed to update imported_rows: ' . $e->getMessage());
+            Log::error('Failed to update successful_rows: ' . $e->getMessage());
         }
 
         try {
@@ -280,12 +281,13 @@ class ImportExcel implements ShouldQueue
             $reader->setReadEmptyCells(false);
 
             // Set a read filter to only read the rows we need
-            $reader->setReadFilter(new class($startRow, $endRow, $this->options) implements IReadFilter {
+            $reader->setReadFilter(new class ($startRow, $endRow, $this->options) implements IReadFilter {
                 public function __construct(
                     private int $startRow,
                     private int $endRow,
                     private array $options
-                ) {}
+                ) {
+                }
 
                 public function readCell($columnAddress, $row, $worksheetName = ''): bool
                 {
