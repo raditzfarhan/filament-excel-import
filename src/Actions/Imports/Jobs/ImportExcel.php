@@ -178,11 +178,12 @@ class ImportExcel implements ShouldQueue
             Log::error('Failed to update successful_rows: ' . $e->getMessage());
         }
 
-        try {
-            $import->increment('failed_rows', $failedRowsCount);
-        } catch (Throwable $e) {
-            Log::error('Failed to update failed_rows: ' . $e->getMessage());
-        }
+        // There is no failed_rows in the filament import
+        // try {
+        //     $import->increment('failed_rows', $failedRowsCount);
+        // } catch (Throwable $e) {
+        //     Log::error('Failed to update failed_rows: ' . $e->getMessage());
+        // }
 
         // Notify only if we can safely do so
         try {
